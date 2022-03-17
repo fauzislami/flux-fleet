@@ -1,0 +1,12 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: deployments-repo
+  namespace: flux-system
+spec:
+  interval: 30s
+  ref:
+    branch: master
+  url: ssh://git@github.com/fauzislami/flux-apps-deployment.git
+
