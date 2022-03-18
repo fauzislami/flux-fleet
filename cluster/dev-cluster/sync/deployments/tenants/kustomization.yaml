@@ -3,7 +3,4 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ./dev-team-a
-  - ./dev-team-b
-  - ./dev-team-c
   - ./dev-team-d
