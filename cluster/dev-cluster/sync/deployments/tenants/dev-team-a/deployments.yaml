@@ -20,7 +20,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  path: ./company/blackbox/dev/namespaces/dev-team-a
+  path: ./company/blackbox/dev/dev-team-a
   prune: true
   sourceRef:
     kind: GitRepository
