@@ -4,4 +4,5 @@ kind: Kustomization
 
 resources:
   - ./tenants/dev-team-a
+  - ./tenants/dev-team-b
   - ./tenants/dev-team-d
