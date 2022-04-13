@@ -13,13 +13,13 @@ spec:
         app: podinfo
     spec:
       containers:
-        - name: podinfod
-          image: ghcr.io/stefanprodan/podinfo:5.0.0 # {"$imagepolicy": "flux-system:podinfo"}
-          imagePullPolicy: IfNotPresent
-          ports:
-            - name: http
-              containerPort: 9898
-              protocol: TCP
+      - name: podinfod
+        image: ghcr.io/stefanprodan/podinfo:5.0.3 # {"$imagepolicy": "flux-system:podinfo"}
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 9898
+          protocol: TCP
 ---
 apiVersion: image.toolkit.fluxcd.io/v1beta1
 kind: ImageRepository
@@ -29,7 +29,6 @@ metadata:
 spec:
   image: ghcr.io/stefanprodan/podinfo
   interval: 1m0s
-
 ---
 apiVersion: image.toolkit.fluxcd.io/v1beta1
 kind: ImagePolicy
@@ -42,7 +41,6 @@ spec:
   policy:
     semver:
       range: 5.0.x
-
 ---
 apiVersion: image.toolkit.fluxcd.io/v1beta1
 kind: ImageUpdateAutomation
@@ -68,4 +66,3 @@ spec:
   update:
     path: ./cluster/dev-cluster
     strategy: Setters
-
