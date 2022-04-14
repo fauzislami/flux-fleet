@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # apiVersion: apps/v1
 # kind: Deployment
 # metadata:
@@ -68,4 +69,3 @@
 #   update:
 #     path: ./cluster/dev-cluster
 #     strategy: Setters
-
