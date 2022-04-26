@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: apple
+  labels:
+    app: apple-app
+  name: apple-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apple-app
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: apple-app
+    spec:
+      containers:
+      - image: ${IMAGE_REPO}:${IMAGE_TAG}                 #quay.io/islamifauzi/apple:v1
+        name: apple
+        ports:
+        - containerPort: 80
+        resources: {}

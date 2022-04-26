@@ -1,0 +1,99 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: apple-repo
+  namespace: apple
+spec:
+  interval: 1m0s
+  ref:
+    branch: master
+  secretRef:
+    name: deployment-repo-auth-apple
+  url: ssh://git@github.com/fauzislami/flux-fleet.git
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: apple-kustomization
+  namespace: apple
+spec:
+  interval: 10m0s
+  path: ./cluster/dev-cluster/apps-deployment
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: apple-repo
+  postBuild:
+    substituteFrom: # https://fluxcd.io/docs/components/kustomize/kustomization/#variable-substitution
+      - kind: ConfigMap
+        name: apple-flux-variables
+      - kind: ConfigMap
+        name: fruit-version
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apple-flux-variables
+  namespace: apple
+data:
+  IMAGE_REPO: ${CORE_REPOSITORY}/apple #Depends on where the image is pushed. We might need to change this later.
+  IMAGE_TAG: ${APPLE_VERSION}
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageRepository
+metadata:
+  name: apple-image-repo
+  namespace: flux-system
+spec:
+  image: ${CORE_REPOSITORY}/apple
+  interval: 1m0s
+  # secretRef:
+    # name: ecr-credentials
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImagePolicy
+metadata:
+  name: apple-image-policy
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: apple-image-repo
+  policy:
+    semver:
+      range: v1.0.x
+  # filterTags:
+  #   pattern: ^master-[a-fA-F0-9]+-(?P<ts>.*)-sendgrid # using named capturing group $ts / master-bf9cb11-1633348839-sendgrid
+  #   extract: "$ts"
+  # policy:
+  #   numerical:
+  #     order: asc
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageUpdateAutomation
+metadata:
+  name: apple-image-automation
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  sourceRef:
+    kind: GitRepository
+    name: deployments-repo
+  git:
+    checkout:
+      ref:
+        branch: master
+    commit:
+      author:
+        email: fluxcdbot@users.noreply.github.com
+        name: fluxcdbot
+      messageTemplate: "{{range .Updated.Images}}{{println .}}{{end}}"
+    push:
+      branch: master
+  update:
+    path: ./cluster/dev-cluster/bblite-deployments
+    strategy: Setters

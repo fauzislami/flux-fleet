@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fruit-version
+  namespace: apple
+data:
+  CORE_REPOSITORY: quay.io/islamifauzi
+  APPLE_VERSION: v1.0.1 # {"$imagepolicy": "flux-system:apple-image-policy"}
