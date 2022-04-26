@@ -5,4 +5,4 @@ metadata:
   namespace: apple
 data:
   CORE_REPOSITORY: quay.io/islamifauzi
-  APPLE_VERSION: v1.0.1 # {"$imagepolicy": "flux-system:apple-image-policy"}
+  APPLE_VERSION: quay.io/islamifauzi/apple:v1.0.2 # {"$imagepolicy": "flux-system:apple-image-policy"}
